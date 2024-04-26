@@ -55,18 +55,38 @@ def insert(T, element):
     T.root = TrieNode()
     T.root.children = []
     T.root.key = ''
-
   # entrar a recursividad
   _insertREC(T.root, element)
-
-
-
 
 # search(T,element)  Descripción:  Verifica que un elemento se encuentre  dentro del  Trie 
 #  Entrada:  El  Trie  sobre  la  cual  se  quiere  buscar  el  elemento  (Trie)   y 
 #  el valor del elemento (palabra) 
 #  Salida  : Devuelve  False o True   según se encuentre  el elemento.
 
+def _searchREC(node, element):
+  # check existe un key en children
+  for i in range(len(node.children)):
+    # comparar key
+    if node.children[i].key == element[0]:
+      # comparar si letra final
+      if len(element) == 1:
+        # comprobar se el nodo i es ta declarado como final de letra
+        if node.children[i].isEndOfWord:
+          return True
+        else: 
+          return False
+      # eliminar primer carácter y llamar recursividad 
+      elementAUX = element[1:]
+      return _searchREC(node.children[i], elementAUX)
+  # de lo contrario
+  return False
+
+def search(T, element):
+  # verificar raíz
+  if T.root == None:
+    return False
+  # entrar a recursividad
+  return _searchREC(T.root, element)
 
 def print_trie(root, indent=''):
   if root is None:
@@ -88,3 +108,6 @@ insert(call, 'dsad')
 
 print_trie(call.root)
 
+print()
+
+print(search(call, 'dsade'))
