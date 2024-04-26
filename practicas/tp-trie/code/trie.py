@@ -88,6 +88,59 @@ def search(T, element):
   # entrar a recursividad
   return _searchREC(T.root, element)
 
+# delete(T,element)  Descripción:  Elimina un elemento se encuentre dentro  del  Trie 
+#  Entrada:  El  Trie  sobre  la  cual  se  quiere  eliminar  el  elemento  (Trie) 
+#  y el valor del elemento (palabra) a  eliminar. 
+#  Salida  : Devuelve  False o True   según se haya eliminado  el elemento.
+
+def _deleteParent(node):
+  # comprobar si tiene hijos de lo contrario llamar al parent
+  if len(node.children) == 0:
+    # comprobar si es raíz
+    if node.parent == None:
+      return
+    # comprobar si es letra final
+    if node.isEndOfWord:
+      return
+    # eliminar
+    node.parent.children.remove(node)
+    # llamar recursividad
+    _deleteParent(node.parent)
+
+def _deleteREC(node, element):
+  # check existe un key en children
+  for i in range(len(node.children)):
+    # comparar key
+    if node.children[i].key == element[0]:
+      # si no es final
+      if len(element) != 1:
+        # eliminar primer carácter y llamar recursividad 
+        elementAUX = element[1:]
+        return _deleteREC(node.children[i], elementAUX)
+      # es final
+      # comprobar se el nodo i no esta declarado como final de letra
+      if not node.children[i].isEndOfWord:
+        return False
+      # comprobar si tiene hijos el key
+      if len(node.children[i].children) != 0:
+        # declaro no ya no es final de una letra
+        node.children[i].isEndOfWord = False
+        return True
+      # no tiene hijos el key eliminar
+      del node.children[i]
+      # eliminar padres
+      _deleteParent(node)
+      return True
+  # de lo contrario
+  return False
+
+def delete(T, element):
+  # verificar raíz
+  if T.root == None:
+    return False
+  # entrar a recursividad
+  return _deleteREC(T.root, element)
+
 def print_trie(root, indent=''):
   if root is None:
     return
@@ -110,4 +163,6 @@ print_trie(call.root)
 
 print()
 
-print(search(call, 'dsade'))
+print(delete(call, 'dsad'))
+
+print_trie(call.root)
