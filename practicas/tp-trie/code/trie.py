@@ -141,6 +141,56 @@ def delete(T, element):
   # entrar a recursividad
   return _deleteREC(T.root, element)
 
+# Ejercicio 4 
+#  Implementar un algoritmo que dado un árbol  Trie  T ,
+#  un patrón  p (prefijo)  y un entero  n, escriba todas
+#  las palabras del árbol que empiezan por  p  y sean de
+#  longitud  n  .
+
+def _prefixPrint(node, string):
+  # agregar el string
+  string = node.key + string
+  # recursividad
+  if node.parent == None:
+    print(string)
+  else:
+    _prefixPrint(node.parent, string)
+
+def _prefixREC(node, prefix, n):
+  # comprobar longitud
+  if n == 0:
+    return
+  # check existe un key en children
+  for i in range(len(node.children)):
+    # buscar palabras
+    if prefix == '':
+      # comprobar se el nodo i es ta declarado como final de letra
+      if node.children[i].isEndOfWord:
+        # imprimir
+        _prefixPrint(node.children[i], '')
+      # eliminar primer carácter y llamar recursividad
+      nAUX = n - 1
+      _prefixREC(node.children[i], prefix, nAUX)
+    else:
+      # comparar key
+      if  node.children[i].key == prefix[0]:
+        # comprobar se el nodo i es ta declarado como final de letra
+        if node.children[i].isEndOfWord:
+          # imprimir
+          _prefixPrint(node.children[i], '')
+        # eliminar primer carácter y llamar recursividad
+        nAUX = n - 1 
+        prefixAUX = prefix[1:]
+        _prefixREC(node.children[i], prefixAUX, nAUX)
+    
+
+def prefix(T, prefix, n):
+  # verificar raíz
+  if T.root == None:
+    return
+  # entrar a recursividad
+  return _prefixREC(T.root, prefix, n)
+
 def print_trie(root, indent=''):
   if root is None:
     return
@@ -163,6 +213,4 @@ print_trie(call.root)
 
 print()
 
-print(delete(call, 'dsad'))
-
-print_trie(call.root)
+prefix(call, 'dsad', 10)
