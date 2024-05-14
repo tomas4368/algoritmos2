@@ -191,6 +191,62 @@ def prefix(T, prefix, n):
   # entrar a recursividad
   return _prefixREC(T.root, prefix, n)
 
+# Ejercicio 5 
+#  Implementar un algoritmo que dado los  Trie  T1 y T2  devuelva  
+#  True  si estos pertenecen al mismo  documento y  False  en caso 
+#  contrario. Se considera  que un   Trie  pertenece al mismo documento  
+#  cuando:  
+#     1.   Ambos Trie sean iguales (esto se debe cumplir)  
+#     3.   Si la implementación está basada en LinkedList, considerar el caso donde 
+#          las palabras hayan  sido insertadas en un orden diferente.
+#  En otras palabras, analizar si todas las palabras de T1 se encuentran en T2.
+#  Analizar el costo computacional. 
+
+def _sortChildren(T):
+  # declarar nueva lista
+  auxChildren = []
+  # default
+  if len(T.children) == 0:
+    return T.children
+  # 
+  for i in T.children:
+    auxChildren.append(i.key)
+  # 
+  auxChildren.sort()
+  for i in range(len(T.children)):
+    print()
+  
+  
+
+def _compareTriREC(T1, T2):
+  # comprobar longitud hijos
+  if len(T1.children) != len(T2.children):
+    return False
+  # ordenar las listas
+  T1.children.sort()
+  T2.children.sort()
+  # comparar hijos
+  for i in range(len(T1.children)):
+    if T1.children[i].key != T2.children[i].key:
+      return False
+  # recursividad
+  for i in range(len(T1.children)):
+    estadoAUX = _compareTriREC(T1.children[i], T2.children[i])
+    if estadoAUX == False:
+      return False
+    
+
+def compareTri(T1, T2):
+  # verificar raíz
+  if T1.root == None or T2.root == None:
+    return
+  # entrar a recursividad
+  estado = _compareTriREC(T1.root, T2.root)
+  # verifica
+  if estado == None:
+    return True
+  return False
+
 def print_trie(root, indent=''):
   if root is None:
     return
@@ -201,16 +257,18 @@ def print_trie(root, indent=''):
   for child in root.children:
       print_trie(child, indent + '  ')
 
-call = Trie()
-insert(call, 'dsad')
-insert(call, 'dsada')
-insert(call, 'flaco')
-insert(call, 'dsad')
-insert(call, 'dsad')
-insert(call, 'dsad')
+# call = Trie()
+# insert(call, 'dsad')
+# insert(call, 'dsada')
+# insert(call, 'flaco')
+# insert(call, 'dsad')
+# insert(call, 'dsad')
+# insert(call, 'dsad')
 
-print_trie(call.root)
+# print_trie(call.root)
 
-print()
+# print()
 
-prefix(call, 'dsad', 10)
+# prefix(call, 'dsad', 10)
+
+# print(compareTri(call, call))
